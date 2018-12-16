@@ -11,6 +11,7 @@ namespace ConsoleProject
             Console.WriteLine(number);
 
             string textSong = "Shakira, shakira... ";
+            number = 6;
         }
     }
 }
