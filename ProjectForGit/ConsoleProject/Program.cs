@@ -9,6 +9,8 @@ namespace ConsoleProject
             Console.WriteLine("Hello World!");
             int number = 5;
             Console.WriteLine(number);
+
+            string textSong = "Shakira, shakira... ";
         }
     }
 }
