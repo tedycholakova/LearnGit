@@ -3,6 +3,7 @@
     using HtmlDOMTree.Interfaces;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Text;
 
     public class HtmlTable : HtmlElement, ITable
@@ -53,15 +54,6 @@
             set => throw new InvalidOperationException("Cannot set text content to Html Table");
         }
 
-        public override IEnumerable<IElement> ChildElements
-        {
-            get { throw new InvalidOperationException("HTML table don't have child element!"); }
-        }
-
-        public override void AddElement(IElement element)
-        {
-            throw new InvalidOperationException();
-        }
         public IElement this[int row, int col]
         {
             get

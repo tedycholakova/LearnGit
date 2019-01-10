@@ -1,85 +1,72 @@
 ﻿namespace HtmlDOMTree.Classes
 {
     using HtmlDOMTree.Interfaces;
-    using System;
     using System.Text;
 
     public class Renderer
     {
-        public IElement Element { get; set; }
-        public virtual void Render(StringBuilder output, int nestedLevel)
+        public string Render(StringBuilder output,IElement node, int nestedLevel)
         {
             var tabs = new string(' ', nestedLevel);
 
-            if (!string.IsNullOrEmpty(this.Element.Name))
+            if (!string.IsNullOrEmpty(node.Name))
             {
                 output.Append(tabs);
-                output.Append($"<{this.Element.Name}>");
+                output.Append($"<{node.Name}>");
             }
 
-            if (!string.IsNullOrEmpty(this.Element.TextContent))
+            if (!string.IsNullOrEmpty(node.TextContent))
             {
-                string encodedContest = this.Encode(this.Element.TextContent, output.ToString());
-                output.Append(encodedContest);
+                this.Encode(node.TextContent, output);
             }
 
-            foreach (var child in this.Element.ChildElements)
+            foreach (var child in node.ChildElements)
             {
                 output.AppendLine();
                 output.Append(' ', nestedLevel);
 
-                Render(output, nestedLevel + 1);
+                Render(output, child.Value, nestedLevel + 1);
             }
 
             output.AppendLine();
             output.Append(tabs);
 
-            if (!string.IsNullOrEmpty(this.Element.Name))
+            if (!string.IsNullOrEmpty(node.Name))
             {
-                output.AppendFormat($"</{this.Element.Name}>");
+                output.AppendFormat($"</{node.Name}>");
             }
 
 
 
-            
+            return output.ToString();
         }
 
         //TODO: Switch cases
-        private string Encode(string textContent, string outputString)
+        private void Encode(string textContent, StringBuilder outputString)
         {
-            var output = new StringBuilder();
-            for (int i = 0; i < this.Element.TextContent.Length; i++)
+            foreach (var symbol in textContent)
             {
-                var symbol = this.Element.TextContent[i];
-
                 switch (symbol)
                 {
                     case '<':
-                        output.Append("%lt;");
+                        outputString.Append("%lt;");
                         break;
                     case '>':
-                        output.Append("%gt;");
+                        outputString.Append("%gt;");
                         break;
                     case '&':
-                        output.Append("%amp;");
+                        outputString.Append("%amp;");
                         break;
                     default:
-                        output.Append(symbol);
+                        outputString.Append(symbol);
                         break;
                 }
             }
-
-            return output.ToString();
         }
 
-
-
-        public override string ToString()
+        public string Render(IElement node)
         {
-            var output = new StringBuilder();
-            this.Render(output, 0);
-
-            return output.ToString();
+            return Render(new StringBuilder(), node, 0);
         }
     }
 }

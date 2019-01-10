@@ -1,51 +1,33 @@
 ﻿namespace HtmlDOMTree.Classes
 {
-    using System;
+    using System.Collections.ObjectModel;
+    using Interfaces;
 
-    using HtmlDOMTree.Interfaces;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    public class HtmlElement : TreeNode<IElement>, IElement
+    public class HtmlElement : IElement
     {
-        // ICollection use because of Add method
-        private readonly ICollection<IElement> _childElements;
+        private readonly TreeNode<IElement> node;
+
         public HtmlElement(string name)
-                : base()
         {
-            this.Name = name;
-            this._childElements = new List<IElement>();
+            Name = name;
+            node = new TreeNode<IElement>(this);
         }
 
         public HtmlElement(string name, string textContent)
-                            : this(name)
+            : this(name)
         {
-            this.TextContent = textContent;
+            TextContent = textContent;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public virtual string TextContent { get; set; }
 
-        public virtual IEnumerable<IElement> ChildElements
+        public ReadOnlyCollection<TreeNode<IElement>> ChildElements => node.Children;
+
+        public void AddElement(IElement element)
         {
-            get
-            {
-                return this._childElements;
-            }
-
-            set
-            {
-                this.ChildElements = value;
-            }
+            node.AddChild(element);
         }
-
-        public virtual void AddElement(IElement element)
-        {
-            this._childElements.Add(element);
-        }
-
-       
     }
 }

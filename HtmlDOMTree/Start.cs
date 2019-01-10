@@ -23,11 +23,14 @@
 
             //Console.WriteLine(html);
 
-            TreeNode<IElement> tree = new TreeNode<IElement>(html);
-            tree.AddChild(title);
-            tree.AddChild(body);
+            html.AddElement(title);
+            html.AddElement(body);
 
-            Console.WriteLine(tree);
+            var renderer = new Renderer();
+
+            var htmlString = renderer.Render(html);
+
+            Console.WriteLine(htmlString);
            // tree.AddChild(html);
 
 
